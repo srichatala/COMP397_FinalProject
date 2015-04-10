@@ -1,0 +1,47 @@
+﻿<!--
+// Authors: Srinivasarao Chatala
+//          Rohit Sharam
+// Last modified by: Srinivasarao Chatala
+// Last modified date:04/06/2015
+// Description: player has to jump the each platform to gain more points.-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>COMP397 - Final Project </title>
+    <!-- Load javascript files -->
+    <script type="text/javascript" src="js/libs/jquery-1.11.0.min.js"></script>
+    <!-- Load EaselJS -->
+    <script type="text/javascript" src="js/libs/easeljs-0.7.1.min.js"></script>
+    <!-- Pre-loading script -->
+    <script type="text/javascript" src="js/libs/preloadjs-NEXT.min.js"></script>
+    <script language="javascript">
+        $(document).ready(function () {
+
+            var game = new Game();
+
+            $("#start-game-button").click(function () {
+                game.startPlaying();
+                $("#main-menu").css("z-index", 0);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="main-menu" class="game-screen game-menu">
+        <ul class="menu-list vertical-menu">
+            <!-- Start button -->
+            <li><button id="start-game-button" class="game-button">Start Game</button></li>
+        </ul>
+    </div>
+    <!-- Loading bar -->
+    <div class="loadingbar full"></div>
+    <div class="loadingbar empty" id="mygame-loadingbar"></div>
+    <!-- High score -->
+    <div id="highscore"></div>
+    <!-- Canvas -->
+    <canvas id="mygame-canvas" class="game-screen" width="800" height="600"></canvas>
+</body>
+
+</html>
