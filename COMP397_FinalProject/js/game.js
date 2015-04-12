@@ -491,7 +491,7 @@ girl.Hero = (function () {
                 level = 3;
             }
            
-            //jagraj
+            //..
             
         }
         
@@ -709,7 +709,7 @@ girl.Game = (function () {
 
             // let's put an obstacle on platform.
             if (Math.random() > 0.5 && i >= 1)
-            {//jagraj
+            {//..
                 var obstacle = new girl.Obstacle();
                 obstacle.x = platform.x + platform.width / 2;
                 obstacle.y = platform.y;
@@ -888,7 +888,7 @@ girl.Game = (function () {
             this.gameOver();
         }
     }
-    //jagraj
+    //..
     p.gameObjectHitHero = function (category, hitCallback) {
 
         for (var i = 0, len = this.camera.children.length; i < len; i++)
