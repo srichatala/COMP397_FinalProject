@@ -13,7 +13,7 @@ var fallMusic;
 var flag = 45;
 var girl = girl || {};
 var speedPlayer = 2;
-var speedChanger = 1000;
+var speedChanger = 10000;
 var playerName = "Anonymous";
 var playerNumber = 1;
 var themeNumber = 1;
@@ -275,7 +275,7 @@ girl.MovableGameObject = (function () {
         this.velocity = new createjs.Point(0, 0);
 
         // how fast it goes downward?
-        this.dropSpeed = 1;
+        this.dropSpeed = 0.8;
 
         // is this game object stands on any ground (platform)?
         this.onGround = false;
@@ -352,8 +352,8 @@ girl.Obstacle = (function () {
 
     p.category = 'obstacle';
 
-    p.width = 20;
-    p.height = 28;
+    p.width = 10;
+    p.height = 8;
 
     // put registration point to the bottom center.
     p.regX = p.width / 2;
