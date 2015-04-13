@@ -1,3 +1,10 @@
+
+// Authors: Srinivasarao Chatala
+//          Rohit Varma
+// Last modified by: Srinivasarao Chatala
+// Last modified date:04/13/2015
+// Description: player has to jump the each platform to gain more points.
+
 // global variables
 
 var mainMusic;
