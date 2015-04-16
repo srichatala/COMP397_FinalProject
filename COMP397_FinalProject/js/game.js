@@ -1,6 +1,5 @@
 
 // Authors: Srinivasarao Chatala
-//          Rohit Varma
 // Last modified by: Srinivasarao Chatala
 // Last modified date:04/13/2015
 // Description: player has to jump the each platform to gain more points.
@@ -20,85 +19,75 @@ var themeNumber = 1;
 var sounds = 1;
 var level = 1;
 
-if (localStorage["Player_Hurry"] != undefined)
-{
+if (localStorage["Player_Hurry"] != undefined) {
     playerNumber = parseInt(localStorage["Player_Hurry"]);
 }
 
-if (localStorage["Theme_Hurry"] != undefined)
-{
+if (localStorage["Theme_Hurry"] != undefined) {
     themeNumber = parseInt(localStorage["Theme_Hurry"]);
 }
 
 
-if (localStorage["Sounds_Hurry"] != undefined)
-{
+if (localStorage["Sounds_Hurry"] != undefined) {
     sounds = parseInt(localStorage["Sounds_Hurry"]);//0 for off and 1 for on
 }
-    
 
 
-window.onload = function() {
+
+window.onload = function () {
     // entry point
-  
-   mainMusic = document.getElementById("main_music");
-   jumpMusic = document.getElementById("jump");
-   fallMusic = document.getElementById("fall");
-   
-  girl.game = new girl.Game();
- 
+
+    mainMusic = document.getElementById("main_music");
+    jumpMusic = document.getElementById("jump");
+    fallMusic = document.getElementById("fall");
+
+    girl.game = new girl.Game();
+
     // startup page of game
 
-  var startButton = document.getElementById('start-btn');
-  startButton.onclick = function ()
-  {
-      if (document.getElementById('playerName').value == "")
-      {
-          document.getElementById('playerName').focus();
-      }
-      else
-      {
-          playerName = document.getElementById('playerName').value;
-          var menuScene = document.getElementById('menu');
-          menuScene.classList.add('hidden');
-         
-          if (sounds == 1)
-          {
-              
-              mainMusic.play();
-          }
+    var startButton = document.getElementById('start-btn');
+    startButton.onclick = function () {
+        if (document.getElementById('playerName').value == "") {
+            document.getElementById('playerName').focus();
+        }
+        else {
+            playerName = document.getElementById('playerName').value;
+            var menuScene = document.getElementById('menu');
+            menuScene.classList.add('hidden');
 
-          girl.game.initGame();
+            if (sounds == 1) {
 
-      }
+                mainMusic.play();
+            }
 
-  }
+            girl.game.initGame();
+
+        }
+
+    }
     //restart page of game
 
     var restartButton = document.getElementById('restart-btn');
-    restartButton.onclick = function ()
-    {
+    restartButton.onclick = function () {
         var gameoverScene = document.getElementById('gameover');
         gameoverScene.classList.add('hidden');
         speedChanger = 1000;
         speedPlayer = 2;
-        if (sounds == 1)
-        {
-        
+        if (sounds == 1) {
+
             mainMusic.play();
         }
         girl.game.initGame();
         createjs.Ticker.setPaused(false);
     }
 
- };
+};
 
 
 
 girl.Preloader = (function () {
     // constructor--- this will not be visible to user because of startup page---
-    function Preloader(game)
-    {
+    function Preloader(game) {
         this.game = game;
 
         var bg = new createjs.Shape();
@@ -122,8 +111,7 @@ girl.Preloader = (function () {
 
     Preloader.prototype = new createjs.Container();
 
-    Preloader.prototype.loadGraphics = function ()
-    {
+    Preloader.prototype.loadGraphics = function () {
         var imagesList = [
           { name: "coin", path: "images/coins.png" },
           { name: "obstacle", path: "images/fire.png" },
@@ -139,35 +127,31 @@ girl.Preloader = (function () {
 
         var totalFiles = imagesList.length;
         var loadedFiles = 0;
-        for (var i = 0, len = totalFiles; i < len; i++)
-        {
+        for (var i = 0, len = totalFiles; i < len; i++) {
             imageToLoad = imagesList[i];
             var img = new Image();
             // make sure we have onload event declaring before setting the src property.
-            img.onload = (function (event)
-            {
+            img.onload = (function (event) {
                 loadedFiles++;
                 console.log('loaded', event, loadedFiles, '/', totalFiles)
 
                 this.updateProgress(loadedFiles / totalFiles);
 
-                if (loadedFiles >= totalFiles)
-                {
+                if (loadedFiles >= totalFiles) {
                     this.game.stage.removeChild(this);
                     var menuScene = document.getElementById('menu');
                     menuScene.classList.remove('hidden');
                 }
             }).bind(this);
 
-           // console.log("loading: ", imageToLoad.path);
+            // console.log("loading: ", imageToLoad.path);
             img.src = imageToLoad.path;
 
             girl.graphics[imageToLoad.name] = imageToLoad;
         };
     }
 
-    Preloader.prototype.updateProgress = function (percentage)
-    {
+    Preloader.prototype.updateProgress = function (percentage) {
         var width = percentage * this.game.stage.canvas.width;
         this.progressBar.graphics.rect(0, 0, width, this.game.stage.canvas.height);
         this.percentageText.text = "loading..." + Math.round(percentage * 100);
@@ -188,8 +172,7 @@ girl.CommonShapes = (function () {
     function CommonShapes() { }
 
     // draw a rectangle with given styling.
-    CommonShapes.rectangle = function (rect)
-    {
+    CommonShapes.rectangle = function (rect) {
         // defualt value for non-defined parameters.
         rect.strokeThickness = rect.strokeThickness || 0;
         rect.strokeColor = rect.strokeColor || "#000";
@@ -215,8 +198,7 @@ girl.CommonShapes = (function () {
 
 
 girl.GameObject = (function () {
-    function GameObject()
-    {
+    function GameObject() {
         this.initialize();
     };
 
@@ -237,15 +219,12 @@ girl.GameObject = (function () {
     // reference the super initialize
     // before overriding the initialize method.
     p.Container_initialize = p.initialize;
-    p.initialize = function ()
-    {
+    p.initialize = function () {
         this.Container_initialize();
     }
 
-    p.hitPoint = function (point)
-    {
-        if (point.x >= 0 && point.x <= this.width && point.y >= 0 && point.y <= this.height)
-        {
+    p.hitPoint = function (point) {
+        if (point.x >= 0 && point.x <= this.width && point.y >= 0 && point.y <= this.height) {
             return true;
         }
         return false;
@@ -260,16 +239,14 @@ girl.GameObject = (function () {
 
 girl.MovableGameObject = (function () {
 
-    function MovableGameObject()
-    {
+    function MovableGameObject() {
         this.initialize();
     };
 
     var p = MovableGameObject.prototype = new girl.GameObject();
 
     p.GameObject_initialize = p.initialize;
-    p.initialize = function ()
-    {
+    p.initialize = function () {
         this.GameObject_initialize();
 
         this.velocity = new createjs.Point(0, 0);
@@ -284,8 +261,7 @@ girl.MovableGameObject = (function () {
         createjs.Ticker.addListener(this, /*pausable=*/ true);
     }
 
-    p.tick = function (timeElapsed)
-    {
+    p.tick = function (timeElapsed) {
         // apply gravity
         this.velocity.y += this.dropSpeed;
         this.velocity.y = Math.min(this.velocity.y, 5); // bound to max velocity
@@ -299,8 +275,7 @@ girl.MovableGameObject = (function () {
 
 girl.Platform = (function () {
 
-    function Platform(width)
-    {
+    function Platform(width) {
         this.initialize(width);
     }
 
@@ -309,21 +284,18 @@ girl.Platform = (function () {
     p.category = 'platform';
 
     p.GameObject_initialize = p.initialize;
-    p.initialize = function (width)
-    {
+    p.initialize = function (width) {
         this.GameObject_initialize();
 
         this.width = width || 120;
         this.height = 12;
 
         // variable width with graphics
-        if (width === 120)
-        {
+        if (width === 120) {
             var image = new createjs.Bitmap("images/platform.png");
             this.addChild(image);
         }
-        else if (width > 120)
-        {
+        else if (width > 120) {
             var imageLeft = new createjs.Bitmap("images/platform-left.png");
             this.addChild(imageLeft); // width 57
             var imageRight = new createjs.Bitmap("images/platform-right.png");
@@ -343,8 +315,7 @@ girl.Platform = (function () {
 
 
 girl.Obstacle = (function () {
-    function Obstacle()
-    {
+    function Obstacle() {
         this.initialize();
     }
 
@@ -353,15 +324,14 @@ girl.Obstacle = (function () {
     p.category = 'obstacle';
 
     p.width = 10;
-    p.height = 8;
+    p.height = 10;
 
     // put registration point to the bottom center.
     p.regX = p.width / 2;
     p.regY = p.height;
 
     p.GameObject_initialize = p.initialize;
-    p.initialize = function ()
-    {
+    p.initialize = function () {
         this.GameObject_initialize();
 
         // copy from zoe exported obstacle.json file.
@@ -379,8 +349,7 @@ girl.Obstacle = (function () {
 
 
 girl.Coin = (function () {
-    function Coin()
-    {
+    function Coin() {
         this.initialize();
     }
     var p = Coin.prototype = new girl.GameObject();
@@ -396,8 +365,7 @@ girl.Coin = (function () {
     p.regY = p.height;
 
     p.GameObject_initialize = p.initialize;
-    p.initialize = function ()
-    {
+    p.initialize = function () {
         this.GameObject_initialize();
 
 
@@ -418,8 +386,7 @@ girl.Coin = (function () {
 
 girl.Hero = (function () {
 
-    function Hero()
-    {
+    function Hero() {
         this.initialize();
     };
 
@@ -427,8 +394,7 @@ girl.Hero = (function () {
 
     // super initialize
     p.MovableGameObject_initialize = p.initialize;
-    p.initialize = function ()
-    {
+    p.initialize = function () {
         this.MovableGameObject_initialize();
 
         this.category = 'hero';
@@ -442,12 +408,10 @@ girl.Hero = (function () {
 
         // copy from zoe exported running.json file.
         var spritesheetData;
-        if (playerNumber == 1)
-        {
-           spritesheetData = { "images": ["images/running1.png"], "frames": [[1, 4, 21, 28, 0, 0, 0], [37, 2, 17, 30, 0, 0, 0], [69, 1, 17, 31, 0, 0, 0], [103, 1, 17, 31, 0, 0, 0]], "animations": { "all": { "frames": [0, 1, 2, 3], frequency: 5 } } }
+        if (playerNumber == 1) {
+            spritesheetData = { "images": ["images/running1.png"], "frames": [[1, 4, 21, 28, 0, 0, 0], [37, 2, 17, 30, 0, 0, 0], [69, 1, 17, 31, 0, 0, 0], [103, 1, 17, 31, 0, 0, 0]], "animations": { "all": { "frames": [0, 1, 2, 3], frequency: 5 } } }
         }
-        else
-        {
+        else {
             spritesheetData = { "images": ["images/running2.png"], "frames": [[3, 1, 28, 32, 0, 0, 0], [38, 0, 24, 32, 0, 0, 0], [68, 0, 17, 32, 0, 0, 0], [93, 2, 26, 30, 0, 0, 0]], "animations": { "all": { "frames": [0, 1, 2, 3], frequency: 5 } } }
 
         }
@@ -466,10 +430,8 @@ girl.Hero = (function () {
 
     p.jump = function () {
 
-        if (this.onGround)
-        {
-            if (sounds == 1)
-            {
+        if (this.onGround) {
+            if (sounds == 1) {
                 jumpMusic.play();
             }
             this.velocity.y = -11;
@@ -478,30 +440,26 @@ girl.Hero = (function () {
     }
 
     p.MovableGameObject_tick = p.tick;
-    p.tick = function ()
-    {
+    p.tick = function () {
         this.MovableGameObject_tick();
         this.velocity.x = speedPlayer;
         speedChanger--;
-        if (speedChanger == 0)
-        {
-            
+        if (speedChanger == 0) {
+
             speedChanger = 1000;
             speedPlayer = speedPlayer + 0.3;
-            
-            if (speedPlayer > 2.5)
-            {
+
+            if (speedPlayer > 2.5) {
                 level = 2;
             }
-            if (speedPlayer > 3.8)
-            {
+            if (speedPlayer > 3.8) {
                 level = 3;
             }
-           
+
             //..
-            
+
         }
-        
+
     }
 
     return Hero;
@@ -510,47 +468,40 @@ girl.Hero = (function () {
 
 
 girl.TopScores = (function () {
-    
-    function TopScores()
-    {
-        if (localStorage['scores'] !== undefined)
-        {
+
+    function TopScores() {
+        if (localStorage['scores'] !== undefined) {
             this.data = JSON.parse(localStorage['scores']);
         }
-        else
-        {
+        else {
             this.data = {
                 scores: [],
-                names:[]
+                names: []
             }
         }
     }
-    
+
     var p = TopScores.prototype;
 
     p.saveScore = function (score, player) { //rank updation tested ok
 
         TopScores();
-        if (this.data.scores.length == 0)
-        {
+        if (this.data.scores.length == 0) {
             // add to scores array
-            
+
             this.data.scores.push(score);
             this.data.names.push(player);
         }
         else {
 
             var playerFound = false;
-            for (var i = this.data.scores.length - 1; i >= 0 && playerFound==false; i--)
-            {
+            for (var i = this.data.scores.length - 1; i >= 0 && playerFound == false; i--) {
                 //checking same player
-                if (this.data.names[i] == player)
-                {
+                if (this.data.names[i] == player) {
                     if (this.data.scores[i] < score)//his best score will remain in local storage
                     {
                         this.data.scores[i] = score;
-                        while (this.data.scores[i - 1] <= this.data.scores[i]&& i>=0)
-                        {
+                        while (this.data.scores[i - 1] <= this.data.scores[i] && i >= 0) {
                             var tmp = this.data.scores[i - 1];
                             this.data.scores[i - 1] = this.data.scores[i];
                             this.data.scores[i] = tmp;
@@ -560,60 +511,52 @@ girl.TopScores = (function () {
                             i--;
                         }
                     }
-                    
-                    playerFound=true;
+
+                    playerFound = true;
                     break;
                 }
             }
-            if (playerFound == false)
-            {
+            if (playerFound == false) {
                 //this.data.scores.push(score);
                 //this.data.names.push(player);
-                for (var j = this.data.scores.length - 1; j >= 0; j--)
-                {
+                for (var j = this.data.scores.length - 1; j >= 0; j--) {
 
 
-                    if (this.data.scores[j] > score)
-                    {
+                    if (this.data.scores[j] > score) {
                         this.data.scores[j + 1] = score;
                         this.data.names[j + 1] = player;
                         break;
                     }
-                    else
-                    {
+                    else {
                         this.data.scores[j + 1] = this.data.scores[j];
                         this.data.names[j + 1] = this.data.names[j];
                     }
 
                 }
 
-                if (j == -1)
-                {
+                if (j == -1) {
                     this.data.scores[0] = score;
                     this.data.names[0] = player;
                 }
             }
         }
-        
+
 
         // slice the array to maximum 5 elements
-        if (this.data.scores.length > 5)
-        {
+        if (this.data.scores.length > 5) {
             this.data.scores.pop();
             this.data.names.pop();
         }
         // save to local storage
-        
+
         localStorage['scores'] = JSON.stringify(this.data);
-        
+
     }
 
-    p.toHTML = function ()
-    {
+    p.toHTML = function () {
         var html = "<ul>";
 
-        for (var i = 0, len = this.data.scores.length; i < len; i++)
-        {
+        for (var i = 0, len = this.data.scores.length; i < len; i++) {
             html += "<li>Rank " + (i + 1) + " - " + this.data.names[i] + " - " + this.data.scores[i] + "</li>";
         }
 
@@ -628,9 +571,8 @@ girl.TopScores = (function () {
 
 girl.Game = (function () {
     // constructor
-        function RushGame()
-        {
-        
+    function RushGame() {
+
         this.canvas = document.getElementById('game-canvas');
 
         // score
@@ -643,24 +585,20 @@ girl.Game = (function () {
         this.bg = new createjs.Container();
         var bgImage;
 
-        if (themeNumber == 1)
-        {
+        if (themeNumber == 1) {
 
             bgImage = new createjs.Bitmap('images/theme1.png');
         }
-        else if (themeNumber == 2)
-        {
+        else if (themeNumber == 2) {
             bgImage = new createjs.Bitmap('images/theme2.png');
         }
-        else if (themeNumber == 3)
-        {
+        else if (themeNumber == 3) {
             bgImage = new createjs.Bitmap('images/theme3.png');
         }
-        else
-        {
+        else {
             bgImage = new createjs.Bitmap('images/theme4.png');
         }
-       
+
         this.bg.addChild(bgImage);
         this.stage.addChild(this.bg);
 
@@ -678,8 +616,7 @@ girl.Game = (function () {
 
     var p = RushGame.prototype;
 
-    p.resetGame = function ()
-    {
+    p.resetGame = function () {
         this.camera.removeAllChildren();
         this.camera.x = 0;
         createjs.Ticker.removeAllListeners();
@@ -695,8 +632,7 @@ girl.Game = (function () {
         var lastPlatformX = 50;
         var lastPlatformY = 150;
 
-        for (var i = 0; i < 200; i++)
-        {
+        for (var i = 0; i < 200; i++) {
             var width = 120 + Math.round(Math.random() * 50);
             var platform = new girl.Platform(width);
 
@@ -715,15 +651,13 @@ girl.Game = (function () {
             lastPlatformY = platform.y;
 
             // let's put an obstacle on platform.
-            if (Math.random() > 0.5 && i >= 1)
-            {//..
+            if (Math.random() > 0.5 && i >= 1) {//..
                 var obstacle = new girl.Obstacle();
                 obstacle.x = platform.x + platform.width / 2;
                 obstacle.y = platform.y;
                 this.camera.addChild(obstacle);
             }
-            else
-            {
+            else {
                 // put coins there if no obstacle.
                 var coin = new girl.Coin();
                 coin.x = platform.x + platform.width / 2;
@@ -742,13 +676,11 @@ girl.Game = (function () {
 
         document.onkeydown = handleKeyDown;
 
-        function handleKeyDown(event)
-        {
+        function handleKeyDown(event) {
 
-            switch (event.keyCode)
-            {
+            switch (event.keyCode) {
                 case 32:
-                  
+
                     hero.jump();
                     break;
                 default: console.log("Problem...");
@@ -760,48 +692,43 @@ girl.Game = (function () {
 
 
         //this.stage.onKeyPressed = function () { hero.jump(); }
-        this.stage.onMouseDown = function ()
-        {
+        this.stage.onMouseDown = function () {
             hero.jump();
         }
 
         this.updateView();
     }
 
-    p.tick = function ()
-    {
-        
+    p.tick = function () {
+
 
         this.updateView();
         this.moveGameObjects();
         this.resolveCollision();
 
         this.moveCamera();
-        
+
     }
 
-    p.moveCamera = function ()
-    {
+    p.moveCamera = function () {
         this.camera.x -= this.hero.velocity.x;
     }
 
-    p.updateView = function ()
-    {
+    p.updateView = function () {
         this.stage.update();
 
         this.scoreHud.innerHTML = "<img src='images/coin1.png' />&nbsp;" + this.collectedCoins + "* 100 &nbsp;&nbsp;&nbsp;&nbsp;<img src='images/fireIcon.png' width='25' height='25'&nbsp; /> " + this.jumpedObstacle + "* 50 &nbsp;"
             + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-            +"Level : "+level
+            + "Level : " + level
             + "<span style='float:right;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Player : " + playerName + "</span><span style='float:right;'> &nbsp;&nbsp;&nbsp;Score :" + (this.collectedCoins * 100 + this.jumpedObstacle * 50) + "</span>";
-     
+
     }
 
     p.gameOver = function () {
 
         createjs.Ticker.setPaused(true);
-        if (sounds == 1)
-        {
-            
+        if (sounds == 1) {
+
             mainMusic.pause();
         }
         var gameoverScene = document.getElementById('gameover');
@@ -811,58 +738,52 @@ girl.Game = (function () {
         var fbText;
         localStorage['maxScore'] = localStorage['maxScore'] || 0; // set the saved max score to zero if not defined
 
-        var maxScore = Math.max(localStorage['maxScore'], this.collectedCoins * 100 + this.jumpedObstacle*50);
+        var maxScore = Math.max(localStorage['maxScore'], this.collectedCoins * 100 + this.jumpedObstacle * 50);
         localStorage['maxScore'] = maxScore;
 
-        yourScore.innerHTML = '<br/><br/>Your score is ' + (this.collectedCoins * 100 + this.jumpedObstacle*50) + '.';
+        yourScore.innerHTML = '<br/><br/>Your score is ' + (this.collectedCoins * 100 + this.jumpedObstacle * 50) + '.';
 
-        if ((this.collectedCoins * 100 + this.jumpedObstacle * 50) >= maxScore)
-        {
+        if ((this.collectedCoins * 100 + this.jumpedObstacle * 50) >= maxScore) {
             yourScore.innerHTML += '<br/><br/><b>Congrats!!! You made highest Score. </b>';
             tweet.href = 'http://twitter.com/share?text=I scored ' + (this.collectedCoins * 100 + this.jumpedObstacle * 50) + ' points which is the highest in the Hurry Up Game by Sri Chatala...';
             fbText = 'I scored' + (this.collectedCoins * 100 + this.jumpedObstacle * 50) + ' points which is the highest in the Huury Up Game by Sri Chatala...';
         }
-        else
-        {
+        else {
             tweet.href = 'http://twitter.com/share?text=I scored ' + (this.collectedCoins * 100 + this.jumpedObstacle * 50) + ' points in the Hurry Up Game by Sri Chatala...';
             fbText = 'I scored' + (this.collectedCoins * 100 + this.jumpedObstacle * 50) + ' points in the Huury Up Game by Sri Chatala...';
-          
-            yourScore.innerHTML += '<br/><br/><b>Top 5 Highest Scores : </b>' ;
+
+            yourScore.innerHTML += '<br/><br/><b>Top 5 Highest Scores : </b>';
         }
-        fb.click(function ()
-        {
-          window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href),
-              fbText+'..',
-              'width=626,height=436');
-            
+        fb.click(function () {
+            window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href),
+                fbText + '..',
+                'width=626,height=436');
+
         });
         var topScores = new girl.TopScores();
         topScores.saveScore((this.collectedCoins * 100 + this.jumpedObstacle * 50), playerName);
         var topScoresHud = document.getElementById('top-scores');
         topScoresHud.innerHTML = topScores.toHTML();
 
-       
-       
+
+
         gameoverScene.classList.remove('hidden');
     }
- 
+
     p.moveGameObjects = function () {
-        
-        for (var i = 0, len = this.camera.children.length; i < len; i++)
-        {
+
+        for (var i = 0, len = this.camera.children.length; i < len; i++) {
             var gameObject = this.camera.children[i];
-            if (gameObject.category == "obstacle" && gameObject.x > this.hero.x - 30 && gameObject.x < (this.hero.x -30+ speedPlayer))
-            {
+            if (gameObject.category == "obstacle" && gameObject.x > this.hero.x - 30 && gameObject.x < (this.hero.x - 30 + speedPlayer)) {
                 this.jumpedObstacle++;
-               // alert("u jumped obstacle");
+                // alert("u jumped obstacle");
             }
-            
-            if (gameObject.velocity)
-            {
+
+            if (gameObject.velocity) {
                 gameObject.x += gameObject.velocity.x;
                 gameObject.y += gameObject.velocity.y;
             }
-            
+
             // for each game object, we mark the outside of screen flag
             var globalPosition = new createjs.Point();
             globalPosition.x = gameObject.x + this.camera.x;
@@ -874,47 +795,39 @@ girl.Game = (function () {
                 globalPosition.y + gameObject.height < 0) {
                 gameObject.isOutsideOfScreen = true;
             }
-            else
-            {
+            else {
                 gameObject.isOutsideOfScreen = false;
             }
         }
 
         flag--;
-        if (flag <= 0)
-        {
-            if (sounds == 1)
-            {
+        if (flag <= 0) {
+            if (sounds == 1) {
                 fallMusic.play();
             }
         }
 
         // game over if the hero falls down
-        if (this.hero.y > 500)
-        {
+        if (this.hero.y > 500) {
             this.gameOver();
         }
     }
     //..
     p.gameObjectHitHero = function (category, hitCallback) {
 
-        for (var i = 0, len = this.camera.children.length; i < len; i++)
-        {
+        for (var i = 0, len = this.camera.children.length; i < len; i++) {
             var gameObject = this.camera.children[i];
 
             // skip the game object if it is out of the screen.
             if (gameObject.isOutsideOfScreen) continue;
 
             // check collision between platform and hero
-            if (gameObject.category === category)
-            {
+            if (gameObject.category === category) {
                 // loop all collision point.
-                for (var j = 0, length = this.hero.collisionPoints.length; j < length; j++)
-                {
+                for (var j = 0, length = this.hero.collisionPoints.length; j < length; j++) {
                     var collisionPoint = this.hero.collisionPoints[j];
                     var point = this.hero.localToLocal(collisionPoint.x, collisionPoint.y, gameObject);
-                    if (gameObject.hitPoint(point))
-                    {
+                    if (gameObject.hitPoint(point)) {
                         hitCallback(point, gameObject);
                     }
                 }
@@ -925,22 +838,20 @@ girl.Game = (function () {
     p.heroHitsPlatform = function (point) {
         // get distance between target point and game object
         var distanceY = -point.y;
-        if (this.hero.velocity.y > 0)
-        {
+        if (this.hero.velocity.y > 0) {
             this.hero.y += distanceY;
             this.hero.velocity.y = 0;
         }
 
         this.hero.onGround = true;
 
-        
-         flag = 45;
-       
-        
-      }
 
-    p.heroHitsCoin = function (point, coin)
-    {
+        flag = 45;
+
+
+    }
+
+    p.heroHitsCoin = function (point, coin) {
         this.camera.removeChild(coin);
         this.collectedCoins++;
     }

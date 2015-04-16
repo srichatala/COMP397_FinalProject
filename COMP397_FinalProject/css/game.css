@@ -153,7 +153,17 @@ footer a
       -ms-transition: all 0.3s ease-out;
       transition: all 0.3s ease-out;
 }
-
+.instructionsinfo {
+    width: 650px;
+    height: 400px;
+    background-color:rgb(203,255,132);
+    position:absolute;
+    font-family:Impact;
+    color:#00a2c8;
+    font-size:xx-large;
+    top:183px;
+    left:360px;
+}
 footer a:hover
 {
         color: #000;
