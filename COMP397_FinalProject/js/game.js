@@ -1,8 +1,11 @@
 
 // Authors: Srinivasarao Chatala
 // Last modified by: Srinivasarao Chatala
-// Last modified date:04/13/2015
-// Description: player has to jump the each platform to gain more points.
+// Last modified date:04/16/2015
+// Description: Main theme of the game is player has to jump from one platform to another platform to
+//    get the coins to increase the points. But, randomly some platform have file, if the player touches 
+//    the fire, player will lose his life and the game will end. When player couldn’t reach the next platform 
+//    while jumping, player will lose the life and the game will ends.
 
 // global variables
 
